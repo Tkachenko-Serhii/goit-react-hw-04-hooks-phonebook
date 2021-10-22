@@ -1,13 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import useLocalStorage from "./hooks/localStorage";
 import Form from "./components/Form";
 import Filter from "./components/Filter";
 import ContactList from "./components/ContactList";
 import shortId from "shortid";
 
 export default function App() {
-  const [contacts, setContacts] = useState(
-    () => JSON.parse(window.localStorage.getItem("contacts")) ?? []
-  );
+  const [contacts, setContacts] = useLocalStorage("contacts", []);
   const [filter, setFilter] = useState("");
 
   const getFormData = (name, number) => {
@@ -25,10 +24,6 @@ export default function App() {
   const onContactDel = (id) => {
     setContacts(contacts.filter((contact) => contact.id !== id));
   };
-
-  useEffect(() => {
-    window.localStorage.setItem("contacts", JSON.stringify(contacts));
-  }, [contacts]);
 
   return (
     <div className='container'>
