@@ -5,7 +5,9 @@ import ContactList from "./components/ContactList";
 import shortId from "shortid";
 
 export default function App() {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(
+    JSON.parse(window.localStorage.getItem("contacts")) ?? []
+  );
   const [filter, setFilter] = useState("");
 
   const getFormData = (name, number) => {
@@ -25,15 +27,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    const parsedContacts = JSON.parse(localStorage.getItem("contacts"));
-
-    if (parsedContacts) {
-      setContacts(parsedContacts);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(contacts));
+    window.localStorage.setItem("contacts", JSON.stringify(contacts));
   }, [contacts]);
 
   return (
