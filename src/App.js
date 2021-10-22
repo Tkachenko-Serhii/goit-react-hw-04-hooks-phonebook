@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import useLocalStorage from "./hooks/localStorage";
 import Form from "./components/Form";
 import Filter from "./components/Filter";
@@ -18,8 +18,11 @@ export default function App() {
     setContacts([contact, ...contacts]);
   };
 
-  const stateFilter = () =>
-    contacts.filter((contact) => contact.name.toLowerCase().includes(filter));
+  const stateFilter = useMemo(() => {
+    return contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(filter)
+    );
+  }, [contacts, filter]);
 
   const onContactDel = (id) => {
     setContacts(contacts.filter((contact) => contact.id !== id));
@@ -36,7 +39,7 @@ export default function App() {
         stateFilter={filter}
         onChangeFilter={(data) => setFilter(data.toLowerCase())}
       />
-      <ContactList contacts={stateFilter()} onContactDel={onContactDel} />
+      <ContactList contacts={stateFilter} onContactDel={onContactDel} />
     </div>
   );
 }
